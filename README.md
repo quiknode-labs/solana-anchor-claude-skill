@@ -7,7 +7,8 @@ Here's a Claude / Cursor AI rules file I'm using to create and edit my Solana An
 ## How do I use these files?
 
 Claude: clone this repo, and copy `CLAUDE.md` into your project
-Cursor: clone this repo, and copy `CLAUDE.md` into `.cursor/rules`
+
+Cursor and others: clone this repo, and copy `CLAUDE.md` into `AGENTS.md`
 
 ## How do I use Cursor AI to build a Solana Anchor program?
 
