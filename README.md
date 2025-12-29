@@ -1,4 +1,4 @@
-# Solana Anchor Claude / Cursor AI rules
+# Solana Anchor AI rules
 
 🆕 Updated for Anchor 0.32.1
 
