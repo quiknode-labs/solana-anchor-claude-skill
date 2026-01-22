@@ -1,36 +1,40 @@
-# Solana Anchor AI rules
+# Solana Anchor Claude Skill
 
-🆕 Updated for Anchor 0.32.1
+A Claude Code skill for creating and editing Solana Anchor projects with best practices and conventions.
 
-Here's a Claude / Cursor AI rules file I'm using to create and edit my Solana Anchor projects.
+> [!NOTE]
+> Looking for a Claude RULES file (`CLAUDE.md`) for Solana? You're in the right place. We've updated this repo to use the newer Claude Code skills format, which provides better integration and automatic application of guidelines.
 
-## How do I use these files?
+## What are Claude Skills?
 
-Claude: clone this repo, and copy `CLAUDE.md` into your project
+Claude Code supports "skills" - reusable instruction sets that Claude automatically applies when working on your code. Skills are stored in `.claude/skills/` directories and can be invoked manually or triggered automatically based on context.
 
-Cursor and others: clone this repo, and copy `CLAUDE.md` into `AGENTS.md`
+This repo includes a Claude skill that teaches Claude the specific patterns and best practices for Solana/Anchor development, including proper variable naming, avoiding magic numbers, using modern Anchor 0.32.1 syntax, and following Solana-specific conventions.
 
-## How do I use Cursor AI to build a Solana Anchor program?
+## How do I use this skill?
 
-Here's the process I'm currently using to get results I'm happy with.
+### Claude Code
 
-Install these files as per the instructions above.
-Then:
+**Option 1: Per-user skill** (if you work on multiple Solana projects with the same standards)
 
-- Make a proof of concept in Excel. Yes Excel. That allows you to think about the economics of your project before you implement them.
+Copy the skill to your home directory:
 
-- Install Rust Analyzer, use 'Cursor: New Composer' and the Anchor 'multiple' template so it's not a single giant lib.rs. Rename `intructions` to `handlers` (these aren't instructions, they're instruction handlers).
+```bash
+cp -r solana-anchor-claude-skill ~/.claude/skills/
+```
 
-- Write this prompt:
-  > I want you to create a (whatever) using Anchor and Rust. But first I want you to to tell me what you think about this design.
-  >
-  > (Your design - 'Each foo contains many bars, when the doThing instruction handler is run, tokens will be moved from....' etc.)
-  >
-  > (add the testing scenario you made in Excel to help it understand what you want to build.)
+This installs the skill globally for all your projects. The skill won't be committed to git and is personal to your machine.
 
-Then:
+**Option 2: Per-project skill** (recommended for sharing with your team)
 
-- Let Cursor AI tell you what it thinks about the design. You may have design issues or missing pieces. Upgrade the prompt and restart from Step 1.
-- When it doesn't have much feedback left, let it code.
-- Cursor will start coding incrementally and then talk to you. Fix all the Rust Analyzer errors immediately and commit to git before continuing.
-- Iterate through the generation process until you're done.
+Copy the skill into your project directory:
+
+```bash
+cp -r solana-anchor-claude-skill /path/to/your/project/.claude/skills/
+```
+
+This installs the skill only for that specific project. The skill can be committed to git and shared with your team.
+
+**Using the skill:**
+
+Once installed, the skill will automatically apply the Solana/Anchor guidelines when Claude Code is working on your code. You can also manually invoke it with `/solana-anchor-claude-skill`.
