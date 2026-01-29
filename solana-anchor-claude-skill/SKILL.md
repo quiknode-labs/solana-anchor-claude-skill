@@ -107,7 +107,7 @@ Favor `async`/`await` and `try/catch` over `.then()` or `.catch()` or using call
 
 ### Type System
 
-- **Always use `Array<item>`** never use `item[]` for consistency with other generic syntax like `Promise<T>`, `Map<K, V>` and `Set<T>`
+- **Always use `Array<item>`**, never use `item[]` for consistency with other generic syntax like `Promise<T>`, `Map<K, V>`, and `Set<T>`
 - **Don't use `any`**
 
 ### Comments
@@ -187,7 +187,7 @@ Every project will need an IDL.
 idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 ```
 
-and if it uses SPL Tokens (like almost every Anchir project) it will need this dendedency (insert whatever vversion is applicable):
+and if it uses SPL Tokens (like almost every Anchor project) it will need this dependency (insert whatever version is applicable):
 
 ```toml
 [dependencies]
@@ -230,8 +230,10 @@ anchor-spl = "0.32.1"
 #[account]
 pub struct UserProfile {
     pub authority: Pubkey,
+
     #[max_len(50)]
     pub username: String,
+
     pub bump: u8,
 }
 
