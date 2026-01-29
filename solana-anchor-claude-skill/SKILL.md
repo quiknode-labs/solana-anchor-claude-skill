@@ -75,6 +75,24 @@ You can still add comments for additional context, just be careful to avoid comm
 
 - Look out for repeated code that should be turned into functions
 - Avoid 'magic numbers'. Make numbers either have a good variable name, a comment explaining why they are that value, or a reference to the URL you got the value from. If the values come from an IDL, download the IDL, import it, and make a function that gets the value from the IDL rather than copying the value into the source code
+
+This is a magic number. Don't do this:
+
+```ts
+const FINALIZE_EVENT_DISCRIMINATOR = new Uint8Array([
+  27, 75, 117, 221, 191, 213, 253, 249,
+]);
+```
+
+Instead do this:
+
+```ts
+const FINALIZE_EVENT_DISCRIMINATOR = getEventDiscriminator(
+  arciumIdl,
+  "FinalizeComputationEvent",
+);
+```
+
 - The code you are making is for production. You shouldn't have comments like `// In production we'd do this differently` in the final code you produce
 - Don't remove existing comments unless they are no longer useful or accurate
 - Delete unused imports, unused constants, unused files and comments that no longer apply
