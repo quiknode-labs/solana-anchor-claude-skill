@@ -142,7 +142,7 @@ import assert from "node:assert";
 
 ### Thrown object handling
 
-- JavaScript allows arbitrary items - strings, array, numbers etc to be 'thrown'. However you can assume that any non-Error item that is thrown is an programmer error. Handle it like this:
+- JavaScript allows arbitrary items - strings, array, numbers etc to be 'thrown'. However you can assume that any non-Error item that is thrown is an programmer error. Handle it like this (including the comment since most TypeScript developers don't know this):
 
 ```ts
 // In JS it's possible to throw *anything*. A sensible programmer
