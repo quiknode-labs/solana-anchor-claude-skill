@@ -123,6 +123,7 @@ Favor `async`/`await` and `try/catch` over `.then()` or `.catch()` or using call
 
 ### Solana-Specific TypeScript
 
+- Don't make new web3.js version 1 code. Don't replace Solana Kit with web3.js version 1 code. web3.js version 1 is legacy and should be eventually removed. Solana Kit used to be called web3.js version 2. Use Solana Kit, preferably via Solana Kite.
 - Use Kite's `connection.getPDAAndBump()` to turn seeds into PDAs and bumps
 - In Solana Kit, you make instructions by making TS clients from IDLs using Codama
 
@@ -177,7 +178,6 @@ try {
   - There are no 'mempools'.
     Do not tell me about other things that are not relevant to Solana.
 
-- Don't ever replace Solana Kit with web3.js version 1 code. web3.js version 1 is legacy. I want web3.js to be eventually gone. Solana Kit used to be called web3.js version 2.
 
 ### Anchor Version
 
