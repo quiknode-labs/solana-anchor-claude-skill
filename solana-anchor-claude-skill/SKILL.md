@@ -172,7 +172,7 @@ try {
 }
 ```
 
-## Anchor Guidelines
+## Rust Guidelines (Anchor Programs)
 
 ### Platform Awareness
 
