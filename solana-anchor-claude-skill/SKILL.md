@@ -11,7 +11,7 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 
 - Before declaring success or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made.
 
-- If you show this symbol '✅' and there is more work to do, add a '❌' for each remaining work item.
+- When summarizing your work, show the work items you have achieved with this symbol '✅' and there is more work to do, add a '❌' for each remaining work item.
 
 ## Documentation Sources
 
