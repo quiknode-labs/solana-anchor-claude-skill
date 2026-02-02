@@ -24,7 +24,13 @@ Use these official documentation sources:
 - **Switchboard** (if used): https://docs.switchboard.xyz/docs-by-chain/solana-svm
 - **Arcium** (if used): https://docs.arcium.com/developers
 
-Solana Labs documentation is outdated, do not use it. Do not use anything to do with Project Serum. Use current documentation sources listed above.
+## Do not use
+
+- Do not use Solana Labs documentation. The company has been replaced by Anza.
+
+- Do not use any documentaton or tools from Project Serum, which collapsed many years ago.
+
+- Do not use yarn. Use npm. Yarn has no reason to exist and only adds unnecessary dependencies.
 
 ## Library versions
 
