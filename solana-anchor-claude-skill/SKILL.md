@@ -188,6 +188,9 @@ try {
   - There are no 'mempools'.
     Do not tell me about other things that are not relevant to Solana.
 
+- Token program terminology:
+  - Use 'Token Extensions Program' or 'Token extensions' for the newer token program (not 'Token 2022' which is just a code name)
+  - Use 'Classic Token Program' for the older token program
 
 ### Anchor Version
 
