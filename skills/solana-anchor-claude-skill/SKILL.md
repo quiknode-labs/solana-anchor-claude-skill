@@ -1,6 +1,6 @@
 ---
 name: solana-anchor-claude-skill
-description: Use when working on Solana Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Enforces best practices for variable naming, avoiding magic numbers, and using Array<T> syntax.
+description: Use when working on Solana Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unecessary duplication.
 ---
 
 # Coding Guidelines
