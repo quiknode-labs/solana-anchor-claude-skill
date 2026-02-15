@@ -70,6 +70,17 @@ Remove:
 - It is expected that work is complete and functional - no need to state this explicitly
 - Avoid phrases like "This is a complete implementation" or "All features are working"
 - Just deliver the work without meta-commentary about its completeness
+
+### Working with Generated or Unfamiliar Code
+
+**CRITICAL - Verify Before Use:**
+
+- Before calling ANY function whose signature you don't know with certainty, read the actual source code/type definitions first
+- NEVER guess or assume what parameters a function accepts based on what seems logical
+- Don't invent convenience parameters that don't exist
+- Generated code, third-party libraries, and unfamiliar codebases often have different APIs than you expect
+- Common mistake: Assuming a function accepts high-level parameters → WRONG. Check the actual signature in the source files first
+
 ### Code Honesty and Clarity
 
 - It's important not to deceive anyone reading this code. Deception includes:
