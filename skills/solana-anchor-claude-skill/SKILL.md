@@ -64,6 +64,12 @@ Remove:
 - Comments that simply repeat what the code is doing, or the name of a variable, and do not add further insight.
 - Repeated code that should be turned into a named function
 
+### Communication Style
+
+- Do not make disclaimers about being a "complete project" or state what works
+- It is expected that work is complete and functional - no need to state this explicitly
+- Avoid phrases like "This is a complete implementation" or "All features are working"
+- Just deliver the work without meta-commentary about its completeness
 ### Code Honesty and Clarity
 
 - It's important not to deceive anyone reading this code. Deception includes:
