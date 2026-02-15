@@ -18,6 +18,7 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 Use these official documentation sources:
 
 - **Anchor**: https://www.anchor-lang.com/docs
+- **Anchor Error Codes**: https://raw.githubusercontent.com/coral-xyz/anchor/master/lang/src/error.rs
 - **Solana Kite**: https://solanakite.org
 - **Solana Kit**: https://solanakit.com
 - **Agave (Solana CLI)**: https://docs.anza.xyz/ (Anza makes the Solana CLI and Agave.
