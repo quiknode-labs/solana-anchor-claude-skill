@@ -11,6 +11,13 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 
 - Before declaring success or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made.
 
+**CRITICAL: Placeholder tests don't count as success.**
+- Tests that just do `assert.ok(true)` or similar are NOT real tests
+- DO NOT mark "Write tests" as complete until tests actually call the program instructions
+- DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
+- Real tests must: initialize accounts, send transactions, verify state changes, check balances
+- If you find yourself writing placeholder tests, stop and write real integration tests instead
+
 - When summarizing your work, show the work items you have achieved with this symbol '✅' and there is more work to do, add a '❌' for each remaining work item.
 
 ## Documentation Sources
