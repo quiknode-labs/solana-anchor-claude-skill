@@ -242,7 +242,7 @@ try {
 ### Platform Awareness
 
 - Remember this is Solana not Ethereum.
-  - Don't tell me about 'smart contracts' (use 'programs' instead)
+  - Don't tell me about 'smart contracts' or 'protocols' (use 'programs' instead)
   - Don't tell me about 'gas' (use 'transaction fees' instead)
   - There are no 'mempools'.
     Do not tell me about other things that are not relevant to Solana.
