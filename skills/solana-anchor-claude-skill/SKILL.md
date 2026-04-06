@@ -9,7 +9,7 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 
 ## Success Criteria
 
-- Before declaring success or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made.
+- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes.
 
 **CRITICAL: Placeholder tests don't count as success.**
 
