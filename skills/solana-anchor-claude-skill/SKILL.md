@@ -199,7 +199,7 @@ import { getBase58Decoder } from "@solana/codecs";
 const signature = getBase58Decoder().decode(signatureBytes);
 ```
 
-Yes, these difference packages have different concepts of 'encode' and 'decode'.
+Yes, `bs58` and `@solana/codecs` packages have different concepts of 'encode' and 'decode'.
 
 ### Unit Tests
 
