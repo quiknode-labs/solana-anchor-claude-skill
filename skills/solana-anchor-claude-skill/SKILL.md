@@ -35,7 +35,9 @@ Use these official documentation sources:
 
 ## Do not use
 
-- Do not use Solana Labs documentation. The company has been replaced by Anza.
+- Do not use 'Solana Labs' documentation. The company has been replaced by Anza.
+
+- Do not use 'Coral XYZ' documentation. Coral used to maintain Anchor, but Anchor is now maintained by the Solana Foundation (solana.org)
 
 - Do not use any documentaton or tools from Project Serum, which collapsed many years ago.
 
