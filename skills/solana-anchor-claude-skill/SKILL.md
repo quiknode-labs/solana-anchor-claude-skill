@@ -1,6 +1,6 @@
 ---
 name: solana-anchor-claude-skill
-description: Use when working on Solana Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unecessary duplication.
+description: Use when working on Solana software, including one or more of: Solana client code using TypeScript, Rust libraries that use Solana crates, Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unecessary duplication.
 ---
 
 # Coding Guidelines
@@ -9,16 +9,17 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 
 ## Success Criteria
 
-- Before declaring success or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made.
+- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes.
 
 **CRITICAL: Placeholder tests don't count as success.**
+
 - Tests that just do `assert.ok(true)` or similar are NOT real tests
 - DO NOT mark "Write tests" as complete until tests actually call the program instructions
 - DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
 - Real tests must: initialize accounts, send transactions, verify state changes, check balances
 - If you find yourself writing placeholder tests, stop and write real integration tests instead
 
-- When summarizing your work, show the work items you have achieved with this symbol '✅' and there is more work to do, add a '❌' for each remaining work item.
+- When summarizing your work, show the work items you have achieved with this symbol '✅' and if there is any more work to do, add a '❌' for each remaining work item.
 
 ## Documentation Sources
 
@@ -28,13 +29,15 @@ Use these official documentation sources:
 - **Anchor Error Codes**: https://raw.githubusercontent.com/coral-xyz/anchor/master/lang/src/error.rs
 - **Solana Kite**: https://solanakite.org
 - **Solana Kit**: https://solanakit.com
-- **Agave (Solana CLI)**: https://docs.anza.xyz/ (Anza makes the Solana CLI and Agave.
+- **Agave (Solana CLI)**: https://docs.anza.xyz/ (Anza makes the Solana CLI and Agave).
 - **Switchboard** (if used): https://docs.switchboard.xyz/docs-by-chain/solana-svm
 - **Arcium** (if used): https://docs.arcium.com/developers
 
 ## Do not use
 
-- Do not use Solana Labs documentation. The company has been replaced by Anza.
+- Do not use 'Solana Labs' documentation. The company has been replaced by Anza.
+
+- Do not use 'Coral XYZ' documentation. Coral used to maintain Anchor, but Anchor is now maintained by the Solana Foundation (solana.org)
 
 - Do not use any documentaton or tools from Project Serum, which collapsed many years ago.
 
@@ -42,7 +45,7 @@ Use these official documentation sources:
 
 - Do not use **Switchboard Functions** - this product is dead and no longer maintained. (Note: Switchboard oracles are still active and usable.)
 
-- Do not use **Clockwork** - this product is dead. For scheduled instruction handler invocation, use **TukTuk** instead.
+- Do not use **Clockwork** - this product is dead. For scheduled instruction handler invocation, use [TukTuk](https://github.com/helium/tuktuk/tree/main/typescript-examples) instead.
 
 ## Library versions
 
@@ -116,8 +119,7 @@ const foo = getFoo();
 
 - Arrays should be plurals (`shoes`), items within arrays should be the singular (`shoes.forEach((shoe) => {...})`)
 - Functions should be verby, like `calculateFoo` or `getBar`
-- Avoid abbreviations, use full words (e.g., `context` rather than `ctx`)
-- Never use `e` for something thrown
+- Avoid abbreviations, use full words (e.g., use `context` rather than `ctx`). Never use `e` for something thrown, use `thrownObject`, never use `v` when you mean `value`. There is almost no case where a single character variable is a good idea outside maths (eg `p` and `q` for cryptography).
 - Name a transaction some variant of `transaction`. Name instructions some variant of `instruction`. Name signatures some variant of `signature`. Do not confuse them - eg if the type looks like an instruction, you should not call it a 'transaction' because that is deceptive.
 
 You can still add comments for additional context, just be careful to avoid comments that are explaining things that would be better conveyed by good variable naming.
@@ -154,6 +156,8 @@ These guidelines apply to TypeScript unit tests, browser code, and any other pla
 
 ### General TypeScript
 
+Use `type: module` in `package.json` files.
+
 Avoid using a `tsconfig.json` unless it's needed, as we use `tsx` to run most typescript and it doesn't usually need one. If you do need a `tsconfig.json`, state why at the top of the file, and you can use the most modern version of ECMAScript/JavaScript you want - up to say 2023.
 
 ### Async/await
@@ -174,7 +178,8 @@ Favor `async`/`await` and `try/catch` over `.then()` or `.catch()` or using call
 
 - Don't make new `@solana/web3.js` version 1 code. Do not make new code using `@coral-xyz/anchor` package. Don't replace Solana Kit with web3.js version 1 code. web3.js version 1 is legacy and should be eventually removed. Solana Kit used to be called web3.js version 2. Use Solana Kit, preferably via Solana Kite.
 - Use Kite's `connection.getPDAAndBump()` to turn seeds into PDAs and bumps
-- In Solana Kit, you make instructions by making TS clients from IDLs using Codama. You can easily make Codama clients for installed IDLs using
+- There is no need to use offsets that you set to decode Solana account data - either download an npm package for the program like `@solana-program/token` for the token program or make one using Codama.
+- In Solana Kit, you make instructions by making TS clients from IDLs using Codama. You can easily make Codama clients for installed IDLs using:
 
 `npx create-codama-clients`
 
@@ -194,7 +199,7 @@ import { getBase58Decoder } from "@solana/codecs";
 const signature = getBase58Decoder().decode(signatureBytes);
 ```
 
-Yes, these difference packages have difference concepts of 'encode' and 'decode'.
+Yes, `bs58` and `@solana/codecs` packages have different concepts of 'encode' and 'decode'.
 
 ### Unit Tests
 
@@ -299,7 +304,7 @@ anchor-spl = "0.32.1"
 
 ### Space Calculation (CRITICAL - NO MAGIC NUMBERS)
 
-- **Do not use magic numbers anywhere**. I don't want to see `8 + 32` or whatever
+- **Do not use magic numbers anywhere**. I don't want to see `8 + 32` or whatever.
 - **Do not make constants for the sizes of various data structures**
 - For `space`, use syntax like: `space = SomeStruct::DISCRIMINATOR.len() + SomeStruct::INIT_SPACE,`
 - All structs should have `#[derive(InitSpace)]` added to them, to get the `INIT_SPACE` trait
