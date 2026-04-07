@@ -1,6 +1,6 @@
 ---
 name: solana-anchor-claude-skill
-description: Use when working on Solana software, including one or more of: Solana client code using TypeScript, Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unecessary duplication.
+description: Use when working on Solana software, including one or more of: Solana client code using TypeScript, Rust libraries that use Solana crates, Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unecessary duplication.
 ---
 
 # Coding Guidelines
