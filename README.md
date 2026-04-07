@@ -7,7 +7,7 @@ A Claude Code skill for creating and editing Solana projects, including Rust/Anc
 - Minimal code
 - 2026 best practices
 
-This skill is the **most stars of any Solana Claude skill** not produced by the Solana Foundation (which inherently get more distribution) and is made by someone working in the software industry for more than 25 years.
+This skill has the **most stars of any Solana Claude skill** not produced by the Solana Foundation (which inherently get more distribution) and is made by someone working in the software industry for more than 25 years.
 
 ## Sponsor shout out
 
