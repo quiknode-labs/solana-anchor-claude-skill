@@ -45,7 +45,7 @@ Use these official documentation sources:
 
 - Do not use **Switchboard Functions** - this product is dead and no longer maintained. (Note: Switchboard oracles are still active and usable.)
 
-- Do not use **Clockwork** - this product is dead. For scheduled instruction handler invocation, use **TukTuk** instead.
+- Do not use **Clockwork** - this product is dead. For scheduled instruction handler invocation, use [TukTuk](https://github.com/helium/tuktuk/tree/main/typescript-examples) instead.
 
 ## Library versions
 
