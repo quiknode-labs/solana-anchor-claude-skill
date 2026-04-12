@@ -413,8 +413,8 @@ mod my_program {
     use super::*;
 
     #[instruction(discriminator = 0)]
-    pub fn my_instruction(ctx: Ctx<MyAccounts>, amount: u64) -> Result<(), ProgramError> {
-        ctx.accounts.do_something(amount)
+    pub fn my_instruction(context: Ctx<MyAccounts>, amount: u64) -> Result<(), ProgramError> {
+        context.accounts.do_something(amount)
     }
 }
 ```
