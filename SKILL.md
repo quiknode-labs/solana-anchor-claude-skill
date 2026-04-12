@@ -32,6 +32,7 @@ Use these official documentation sources:
 - **Agave (Solana CLI)**: https://docs.anza.xyz/ (Anza makes the Solana CLI and Agave).
 - **Switchboard** (if used): https://docs.switchboard.xyz/docs-by-chain/solana-svm
 - **Arcium** (if used): https://docs.arcium.com/developers
+- **Quasar**: https://github.com/blueshift-gg/quasar and https://quasar-lang.com
 
 ## Do not use
 
@@ -355,6 +356,136 @@ pub struct InitializeProfile<'info> {
 ### System Functions
 
 - When you get the time via Clock, use `Clock::get()?;` rather than `anchor_lang::solana_program::clock`
+
+## Quasar Framework (Alternative to Anchor)
+
+### When to Use Quasar
+
+- Zero-copy, `no_std` Solana program framework by Blueshift
+- Use for performance-critical programs where compute unit counts matter (games, DEXes, order books, settlement engines)
+- Programs compile to ~3-20 KB (vs Anchor's ~150-500 KB)
+- For most programs, Anchor remains the better choice for developer experience
+- Quasar is beta (v0.0.0) — API still evolving
+
+### Core API Differences from Anchor
+
+- `#![cfg_attr(not(test), no_std)]` at top of every lib.rs
+- `Ctx<T>` not `Context<T>`
+- `Result<(), ProgramError>` not `Result<()>`
+- `#[instruction(discriminator = N)]` — explicit discriminators per instruction (not SHA256 hashes)
+- Account structs use `&'info` reference fields: `pub payer: &'info mut Signer`
+- State fields use Pod types: `PodU64`, `PodU32` etc. — `.get()` to read native value, `PodU64::from(value)` to write
+- `log("static string")` not `msg!("format {}", var)` — no format strings in no_std
+- CPI uses builder pattern: `self.system_program.transfer(from, to, amount).invoke()`
+- `set_inner()` for initialising account state
+
+### Program Structure
+
+```
+quasar-project/
+├── Cargo.toml
+├── Quasar.toml
+└── src/
+    ├── lib.rs
+    ├── instructions/
+    │   ├── mod.rs
+    │   └── my_instruction.rs
+    ├── state.rs (optional)
+    └── tests.rs
+```
+
+### lib.rs Pattern
+
+```rust
+#![cfg_attr(not(test), no_std)]
+use quasar_lang::prelude::*;
+
+mod instructions;
+use instructions::*;
+mod state;
+#[cfg(test)]
+mod tests;
+
+declare_id!("...");
+
+#[program]
+mod my_program {
+    use super::*;
+
+    #[instruction(discriminator = 0)]
+    pub fn my_instruction(ctx: Ctx<MyAccounts>, amount: u64) -> Result<(), ProgramError> {
+        ctx.accounts.do_something(amount)
+    }
+}
+```
+
+### Instruction Pattern
+
+```rust
+use quasar_lang::prelude::*;
+
+#[derive(Accounts)]
+pub struct MyAccounts<'info> {
+    #[account(mut)]
+    pub payer: &'info mut Signer,
+    #[account(mut, init, payer = payer, seeds = [b"my_seed", payer], bump)]
+    pub my_account: &'info mut Account<MyState>,
+    pub system_program: &'info Program<System>,
+}
+
+impl<'info> MyAccounts<'info> {
+    #[inline(always)]
+    pub fn do_something(&mut self, amount: u64) -> Result<(), ProgramError> {
+        self.my_account.set_inner(amount);
+        Ok(())
+    }
+}
+```
+
+### String and Vec Support
+
+- `String<P, N>` for variable-length strings (P = prefix type u8/u16/u32, N = max bytes)
+- `Vec<T, P, N>` for variable-length arrays (T must be fixed-size align-1 types like Address, PodU64)
+- State structs with dynamic fields need `<'a>` lifetime
+- No nested dynamic types (`Vec<String>` not supported)
+
+### Testing
+
+- Pure Rust tests with `quasar-svm` — no JavaScript, no Node.js needed
+- Auto-generated client crate from `quasar build` (in `target/client/rust/`)
+- Build with `quasar build`, test with `cargo test`
+
+**Test pattern:**
+
+```rust
+use quasar_svm::{Account, Instruction, Pubkey, QuasarSvm};
+use my_program_client::*;
+
+fn setup() -> QuasarSvm {
+    let elf = include_bytes!("../target/deploy/my_program.so");
+    QuasarSvm::new().with_program(&Pubkey::from(crate::ID), elf)
+}
+
+#[test]
+fn test_my_instruction() {
+    let mut svm = setup();
+    // ... build instruction from client types, process, assert
+}
+```
+
+### What Quasar Doesn't Have (Yet)
+
+- No `declare_program!` for CPI to arbitrary programs — build instructions manually
+- No `close` account constraint — manually zero lamports and data
+- No `realloc` constraint — use fixed-capacity PodString/PodVec
+- No `InitSpace` derive — space is implicit from zero-copy layout
+- Custom struct instruction args don't codegen in the client (issue #126)
+- Limited documentation — read the source and examples
+
+### Reference Examples
+
+- Quasar examples in program-examples: https://github.com/solana-developers/program-examples (quasar/ directories)
+- Official examples: https://github.com/blueshift-gg/quasar/tree/master/examples
 
 ## Git commits
 
