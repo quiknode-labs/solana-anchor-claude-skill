@@ -356,6 +356,115 @@ pub struct InitializeProfile<'info> {
 
 - When you get the time via Clock, use `Clock::get()?;` rather than `anchor_lang::solana_program::clock`
 
+## Editing Quasar Programs
+
+Practical patterns for modifying existing [Quasar](https://github.com/blueshift-gg/quasar) programs. Quasar is a zero-copy, `no_std` Solana program framework — these patterns assume familiarity with its core API (`Ctx<T>`, Pod types, explicit discriminators).
+
+### Adding a New Instruction
+
+1. In `lib.rs`, add to the `#[program]` mod:
+
+```rust
+#[instruction(discriminator = N)]  // N = next available discriminator number
+pub fn new_instruction(context: Ctx<NewInstructionAccounts>, arg: u64) -> Result<(), ProgramError> {
+    context.accounts.handle(arg)
+}
+```
+
+2. Create `src/instructions/new_instruction.rs` with the accounts struct and impl:
+
+```rust
+use quasar_lang::prelude::*;
+
+#[derive(Accounts)]
+pub struct NewInstructionAccounts<'info> {
+    #[account(mut)]
+    pub payer: &'info mut Signer,
+    #[account(mut)]
+    pub my_account: &'info mut Account<MyState>,
+}
+
+impl<'info> NewInstructionAccounts<'info> {
+    #[inline(always)]
+    pub fn handle(&mut self, arg: u64) -> Result<(), ProgramError> {
+        self.my_account.value = PodU64::from(arg);
+        Ok(())
+    }
+}
+```
+
+3. Export from `src/instructions/mod.rs`:
+
+```rust
+pub mod new_instruction;
+pub use new_instruction::*;
+```
+
+### Adding a New Field to State
+
+Quasar state is zero-copy — adding a field changes the account memory layout.
+
+- New fields **must go at the END** of the struct (or existing accounts won't deserialise)
+- Use `PodU64`, `PodU32`, etc. for numeric fields
+- If adding a `String<P, N>` field, the struct needs `<'a>` lifetime
+- There is no `realloc` — use fixed-capacity fields and plan layout upfront
+
+### Common Gotchas When Editing
+
+- **Discriminator collisions**: Each instruction needs a unique discriminator number. Check all existing `#[instruction(discriminator = N)]` before adding a new one.
+- **Pod type conversions**: Reading `PodU64` → `let value: u64 = self.field.get();` or `.into()`. Writing → `self.field = PodU64::from(value);` or `set_inner()`.
+- **No format strings in logs**: `log("static string only")` — can't interpolate variables. Use multiple `log()` calls or log raw bytes.
+- **Reference fields in account structs**: All fields in `#[derive(Accounts)]` structs must be `&'info` or `&'info mut` references.
+- **Seeds in PDA accounts**: `seeds = [b"seed", field_name]` — the macro auto-resolves field references to addresses.
+- **Bumps**: Access via `context.bumps.field_name`, not `context.bumps.get("field_name")`.
+
+### Building and Testing
+
+```bash
+quasar build                       # Compile the program
+cargo test                         # Run tests (quasar-svm)
+quasar build --features client     # Build with client generation
+```
+
+### Adding SPL Token Operations
+
+```toml
+# Cargo.toml
+quasar-spl = { git = "https://github.com/blueshift-gg/quasar" }
+# For Metaplex metadata CPI:
+quasar-spl = { git = "https://github.com/blueshift-gg/quasar", features = ["metadata"] }
+```
+
+```rust
+use quasar_spl::{Token, Mint, TokenCpi, InterfaceAccount, TokenInterface};
+
+// Transfer tokens
+self.token_program.transfer(&self.from, &self.to, &self.authority, amount).invoke()?;
+
+// Mint tokens
+self.token_program.mint_to(&self.mint, &self.token_account, &self.authority, amount).invoke()?;
+
+// Close token account
+self.token_program.close_account(&self.account, &self.destination, &self.authority).invoke_signed(seeds)?;
+```
+
+### CPI to Arbitrary Programs
+
+```rust
+// Define marker type for the target program
+pub struct MyProgram;
+impl Id for MyProgram {
+    const ID: Address = Address::new_from_array([/* program id bytes */]);
+}
+
+// Use in accounts struct
+pub target_program: &'info Program<MyProgram>,
+
+// Build and invoke CPI manually
+let instruction_data = [...]; // Borsh-encoded instruction
+BufCpiCall::new(/* accounts, data */).invoke()?;
+```
+
 ## Git commits
 
 Do not add "Co-Authored-By: Claude" or similar attribution when creating git commits.
