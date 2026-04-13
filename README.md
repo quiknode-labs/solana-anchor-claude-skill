@@ -1,15 +1,21 @@
 # Solana Anchor Claude Skill
 
-A Claude Code skill for creating and editing Solana Anchor projects with best practices and conventions.
+A Claude Code skill for creating and editing Solana projects, including Rust/Anchor and TypeScript, with a focus on:
 
-> [!NOTE]
-> Looking for a Claude RULES file (`CLAUDE.md`) for Solana? You're in the right place. We've updated this repo to use the newer Claude Code **skills** format, which provides better integration and automatic application of guidelines.
+- Maintainability
+- Readability
+- Minimal code
+- 2026 best practices
+
+This skill has the **most stars of any Solana Claude skill** not produced by the Solana Foundation (which inherently get more distribution) and is made by someone working in the software industry for more than 25 years.
+
+## Sponsor shout out
+
+Shout out to [Quicknode](https://quicknode.com) for sponsoring development of this Claude skill!
 
 ## What are Claude Skills?
 
 Claude Code supports "skills" - reusable instruction sets that Claude automatically applies when working on your code. Skills are stored in `.claude/skills/` directories and can be invoked manually or triggered automatically based on context.
-
-This repo includes a Claude skill that teaches Claude the specific patterns and best practices for Solana/Anchor development, including proper variable naming, avoiding magic numbers, using modern Anchor 0.32.1 syntax, and following Solana-specific conventions.
 
 ## Installation
 
