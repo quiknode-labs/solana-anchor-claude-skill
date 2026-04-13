@@ -270,6 +270,8 @@ try {
   - Use onchain and offchain, like online and offline
   - Don't ever use 'on-chain' or 'off-chain'
 
+- Some tools in Solana unfortunately use the same word 'instructions' for both the input and the functions. To avoid confusion, use 'instruction handlers' for the functions that handle instructions, and 'instructions' for the input to those functions.
+
 ### Anchor Version
 
 - Write all code like the latest stable Anchor (currently 0.32.1 but there may be a newer version by the time you read this)
