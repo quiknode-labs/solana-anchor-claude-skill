@@ -9,15 +9,16 @@ Apply these rules to ensure code quality, maintainability, and adherence to proj
 
 ## Success Criteria
 
-- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes.
+- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. 
+- Do not write placeholder tests. Placeholder tests don't count as tests, placeholder tests passing does not achieve your task.
+  - Tests that just do `assert.ok(true)` or similar are placeholder tests and do not count as tests
+  - Tests that do not call the program's instruction handlers are placeholder tests and do not count as tests
+  - Tests must: initialize accounts, send transactions, verify state changes, check balances
+  - If you find yourself writing placeholder tests, stop and write real integration tests instead
+  - DO NOT mark "Write tests" as complete until tests actually call the program instructions
+  - DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
 
-**CRITICAL: Placeholder tests don't count as success.**
-
-- Tests that just do `assert.ok(true)` or similar are NOT real tests
-- DO NOT mark "Write tests" as complete until tests actually call the program instructions
-- DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
-- Real tests must: initialize accounts, send transactions, verify state changes, check balances
-- If you find yourself writing placeholder tests, stop and write real integration tests instead
+- Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes. If you have made a feature, and it is not documented in the README or changelog, there is more work to do and you must continue working.
 
 - When summarizing your work, show the work items you have achieved with this symbol '✅' and if there is any more work to do, add a '❌' for each remaining work item.
 
