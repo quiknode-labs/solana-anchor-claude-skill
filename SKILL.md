@@ -7,17 +7,28 @@ description: "Use when working on Solana software, including one or more of: Sol
 
 Apply these rules to ensure code quality, maintainability, and adherence to project standards.
 
+## Do the whole thing
+
+The marginal cost of completeness is near zero with AI. Do the whole thing.
+
+Do it right. Do it with tests. Do it with documentation. Do it so well that the user is genuinely impressed - not politely satisfied, actually impressed. Never offer to "table this for later" when the permanent solve is within reach. Never leave a dangling thread when tying it off takes five more minutes. Never present a workaround when the real fix exists.
+
+The standard isn't "good enough" - it's "holy shit, that's done." Search before building. Test before shipping.
+
+Ship the complete thing. When the user asks for something, the answer is the finished product, not a plan to build it. Time is not an excuse. Fatigue is not an excuse. Complexity is not an excuse. Boil the ocean.
+
 ## Success Criteria
 
-- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes.
+- Before declaring success, declaring that work is complete, or celebrating, run `npm test`. If the tests fail, there is more work to do. Don't stop until `npm test` passes on the code you have made. 
+- Do not write placeholder tests. Placeholder tests don't count as tests, placeholder tests passing does not achieve your task.
+  - Tests that just do `assert.ok(true)` or similar are placeholder tests and do not count as tests
+  - Tests that do not call the program's instruction handlers are placeholder tests and do not count as tests
+  - Tests must: initialize accounts, send transactions, verify state changes, check balances
+  - If you find yourself writing placeholder tests, stop and write real integration tests instead
+  - DO NOT mark "Write tests" as complete until tests actually call the program instructions
+  - DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
 
-**CRITICAL: Placeholder tests don't count as success.**
-
-- Tests that just do `assert.ok(true)` or similar are NOT real tests
-- DO NOT mark "Write tests" as complete until tests actually call the program instructions
-- DO NOT ask "should I write real tests now?" - if the tests are placeholders, write real ones immediately
-- Real tests must: initialize accounts, send transactions, verify state changes, check balances
-- If you find yourself writing placeholder tests, stop and write real integration tests instead
+- Do not stop until documentation like `README.md` and `CHANGELOG.md` are also updated with your changes. If you have made a feature, and it is not documented in the README or changelog, there is more work to do and you must continue working.
 
 - When summarizing your work, show the work items you have achieved with this symbol '✅' and if there is any more work to do, add a '❌' for each remaining work item.
 
@@ -244,13 +255,12 @@ try {
 
 ## Rust Guidelines (Anchor Programs)
 
-### Platform Awareness
+### Terminology
 
-- Remember this is Solana not Ethereum.
-  - Don't tell me about 'smart contracts' (use 'programs' instead)
+- Remember this is Solana not Ethereum. Ethereum is not relevant to any documentation you write. Do not assume people know or care about Ethereum.
+  - Don't tell me about 'smart contracts' or 'protocols' (use 'programs' instead)
   - Don't tell me about 'gas' (use 'transaction fees' instead)
   - There are no 'mempools'.
-    Do not tell me about other things that are not relevant to Solana.
 
 - Token program terminology:
   - Use 'Token Extensions Program' or 'Token extensions' for the newer token program (not 'Token 2022' which is just a code name)
@@ -259,6 +269,8 @@ try {
 - Onchain
   - Use onchain and offchain, like online and offline
   - Don't ever use 'on-chain' or 'off-chain'
+
+- Some tools in Solana unfortunately use the same word 'instructions' for both the input and the functions. To avoid confusion, use 'instruction handlers' for the functions that handle instructions, and 'instructions' for the input to those functions.
 
 ### Anchor Version
 
