@@ -161,6 +161,51 @@ const FINALIZE_EVENT_DISCRIMINATOR = getEventDiscriminator(
 - Don't remove existing comments unless they are no longer useful or accurate
 - Delete unused imports, unused constants, unused files and comments that no longer apply
 
+## Terminology and Documentation Style
+
+These rules apply across the whole skill: TypeScript clients, Rust libraries, Anchor and Quasar programs, READMEs, doc comments, design docs, commit messages, and any other prose or code we write for Solana. Treat the README as a textbook chapter for the program: precise, opinionated, and walked through in the order a reader needs to learn it.
+
+### Solana vocabulary
+
+- **This is Solana, not Ethereum.** Do not assume readers know or care about Ethereum. No 'smart contracts' or 'protocols' (use 'programs'), no 'gas' (use 'transaction fees'), no 'mempools'.
+- **Token program names.** Use 'Token Extensions Program' or 'Token extensions' for the newer token program (not 'Token 2022', which is just a code name). Use 'Classic Token Program' for the older one.
+- **Onchain, not on-chain.** Use 'onchain' and 'offchain', like 'online' and 'offline'. Never 'on-chain' or 'off-chain'.
+- **Instruction handlers vs instructions.** Solana tooling unfortunately uses 'instructions' for both the input and the functions. Use 'instruction handlers' for the functions, and 'instructions' for the input they take.
+- **"Token" not "SPL Token" in prose.** Tokens are the default. Only qualify when contrasting with SOL. Identifiers from upstream crates such as `SPL_TOKEN_PROGRAM_ID` keep their original spelling.
+- **Do not qualify "fungible" on tokens.** Tokens are fungible by default. Only specify "NFT" when contrasting. Do not write sentences whose only purpose is to explain that tokens are fungible.
+- **Do not conflate token and mint in prose.** Say "token A" and "token B" in economic prose. The mint account is a technical detail; mention it only when describing the accounts an instruction handler takes.
+- **Do not call non-securities "securities".** SOL is not a security legally. For lending programs on Solana, "securities lending" is the wrong frame even when the mechanics are analogous. Use "asset lending", "token lending", or "directional token lending".
+- **Link to https://solana.com/docs/terminology the first time a Solana term appears.** Do not write your own glossary and do not add a footer note. Inline-link the first occurrence of "program", "instruction", "PDA", and similar.
+
+### Naming and identifiers
+
+- **One name per concept.** Pick one term per role, party, or thing and use it everywhere - in the README, comments, and code. Do not swap between "lessor / lessee" and "long holder / short seller". For finance projects, ask the user before locking in vocabulary; getting this wrong forces a global rename later.
+- **Bold canonical terms on first use.** Like a textbook: bold the term where it is first defined, plain everywhere after.
+- **Always name the instruction handlers in lifecycle prose.** Every step that walks through what a user does must name the handler called, for example `take_lease` or `return_lease`. Plain mechanics without handler names breaks the link between prose and code. This applies in both lifecycle overviews and any deep dives.
+- **No pronouns when the antecedent is ambiguous.** This bites hardest in finance docs where "the asset", "the position", "the loan", and "the price" can all be the referent. Re-read every "it", "this", and "that" and replace with the actual noun if there is any chance of confusion.
+
+### Document structure
+
+- **Integrate per-instruction reference into the lifecycle prose.** Do not keep a separate "instruction reference" section that lists handlers in isolation. Walk through the program's flow and inline each handler's full mechanics (signers, accounts, token movements, errors) at the point where the handler is first called. Branching scenarios attach as alternative paths off the main walkthrough.
+- **No section numbers in headings.** No `## 1. Overview`, no `### 3.6 Liquidation`. Headings are words only. Numbered headings break the moment a section is inserted; word-based anchors stay stable.
+- **Cross-references use named anchors with words, never section numbers or `§`.** Use heading words as the link text so the link reads as part of the sentence: `[safety and edge cases](#safety-and-edge-cases)`.
+- **Do not preview the README in the README.** No "the sections below cover X, Y, and Z". The table of contents and headings already do this.
+- **Do not redefine already-defined terms.** If "holder", "short seller", or "keeper" were introduced in the lede, do not add a "Roles" or "Glossary" subsection that defines them again.
+- **Do not tell readers to skip sections.** No "if you already know X, skip to Y". Background sections are useful for everyone; let readers decide what to read.
+- **Use concrete examples in two-asset program intros.** When a program involves two distinct assets (collateral vs. borrowed, base vs. quote), name them concretely, for example "post USDC as collateral, borrow xNVDA". Abstract "different mints A and B" reads as circular because the asymmetry is invisible.
+
+### Prose hygiene
+
+- **No ASCII art, no Mermaid, no markdown tables.** Use headings, nested bullet lists, or short prose. ASCII art looks bad on every surface, Mermaid is unnecessary, and markdown tables do not render on chat surfaces and are usually overkill in prose docs anyway.
+- **No em-dashes anywhere.** Use a regular dash. Em-dashes are LLM-output tells. Applies to the README, code comments, commit messages, and doc strings.
+- **Do not say "worked example" or "worked scenario".** Just "Example", "Scenario", or "Walkthrough". The "worked" qualifier is textbook pretension.
+
+### Accuracy claims
+
+- **Do not claim "non-custodial" if the program holds funds in vaults.** "Non-custodial" in common usage suggests funds never leave the user's wallet, which contradicts every escrow, lending, and AMM program. The narrow DeFi sense is "no admin key, no off-program logic, rules are the deployed bytecode". Say that directly and describe the actual custody arrangement: vaults, PDA signers, no admin override.
+- **Upgrade authority is normal.** Solana programs are usually upgradable so authors can ship security fixes. Do not treat upgrade authority as disqualifying for "trustless" claims. Trust in the author or multisig is baseline; describe who holds it.
+- **Do not claim things are TradFi-only when they exist onchain too.** ETFs, stablecoins, and similar all exist onchain. Do not write "X (a TradFi thing; passive holders onchain)" framings.
+
 ## TypeScript Guidelines
 
 These guidelines apply to TypeScript unit tests, browser code, and any other places where TypeScript is used in the project.
@@ -254,23 +299,6 @@ try {
 ```
 
 ## Rust Guidelines (Anchor Programs)
-
-### Terminology
-
-- Remember this is Solana not Ethereum. Ethereum is not relevant to any documentation you write. Do not assume people know or care about Ethereum.
-  - Don't tell me about 'smart contracts' or 'protocols' (use 'programs' instead)
-  - Don't tell me about 'gas' (use 'transaction fees' instead)
-  - There are no 'mempools'.
-
-- Token program terminology:
-  - Use 'Token Extensions Program' or 'Token extensions' for the newer token program (not 'Token 2022' which is just a code name)
-  - Use 'Classic Token Program' for the older token program
-
-- Onchain
-  - Use onchain and offchain, like online and offline
-  - Don't ever use 'on-chain' or 'off-chain'
-
-- Some tools in Solana unfortunately use the same word 'instructions' for both the input and the functions. To avoid confusion, use 'instruction handlers' for the functions that handle instructions, and 'instructions' for the input to those functions.
 
 ### Anchor Version
 
