@@ -274,8 +274,14 @@ try {
 
 ### Anchor Version
 
-- Write all code like the latest stable Anchor (currently 0.32.1 but there may be a newer version by the time you read this)
+- Write all code like the latest stable Anchor (currently 1.0.1, but there may be a newer version by the time you read this)
 - Do not use unnecessary macros that are not needed in the latest stable Anchor
+
+### Anchor 1.0 specifics
+
+- **TS package is `@anchor-lang/core`**, not `@coral-xyz/anchor`. New TypeScript code imports from `@anchor-lang/core`. The Rust crate is still `anchor-lang`.
+- **`CpiContext::new()` takes a `Pubkey` directly**, not an `AccountInfo`. Use `self.token_program.key()` rather than `self.token_program.to_account_info()` when constructing a `CpiContext`.
+- **Use `transfer_checked` for SPL token CPIs.** Plain `transfer` is deprecated. `transfer_checked` requires the mint and decimals, which is what you should be passing anyway.
 
 ### Anchor has silly defaults
 
@@ -290,7 +296,7 @@ and if it uses SPL Tokens (like almost every Anchor project) it will need this d
 
 ```toml
 [dependencies]
-anchor-spl = "0.32.1"
+anchor-spl = "1.0.1"
 ```
 
 ### Project Structure
@@ -367,6 +373,29 @@ pub struct InitializeProfile<'info> {
 ### System Functions
 
 - When you get the time via Clock, use `Clock::get()?;` rather than `anchor_lang::solana_program::clock`
+
+## Anchor Testing (LiteSVM, Rust or TypeScript)
+
+LiteSVM is the default test harness for Anchor programs post 1.0. It runs the compiled program in-process against an in-memory VM, so tests start instantly and there is no validator boot. Tests can be written in either Rust or TypeScript; pick the one that is closer to the rest of your codebase. Both flows use Solana Kite to keep the test code small. Reference implementation: https://github.com/solanakite/anchor-escrow-2026.
+
+- **Use `kit-plugin-litesvm` as the runtime.** Do not use `anchor test --validator legacy` and do not start `solana-test-validator`. LiteSVM loads the compiled `.so` and executes against an in-process VM.
+- **Anchor.toml test script** should be: `npx create-codama-clients; npx tsx --test --test-reporter=spec tests/*.ts`. The Codama regen runs first so tests always exercise the latest IDL.
+
+### Rust tests
+
+- **Use the Solana Kite Rust crate (`solana-kite`).** It wraps LiteSVM with the same connection-style API as the TypeScript version: `connect()`, `connection.create_wallets()`, `connection.create_token_mint()`, `connection.send_transaction_from_instructions(...)`. Without it, every test ends up hand-rolling boilerplate for accounts, mints, and transaction assembly.
+- Plain `#[test]` functions, no extra harness. `cargo test` is the runner.
+
+### TypeScript tests
+
+These extend the [TypeScript Unit Tests](#unit-tests) rules above (`node:test` runner via `tsx`, Solana Kit + Kite, Codama clients) with the LiteSVM specifics:
+
+- **Send transactions with `connection.sendTransactionFromInstructions({ feePayer, instructions })`.** Do not use `.rpc()` and do not use `.sendAndConfirm()`.
+- **Use `TOKEN_EXTENSIONS_PROGRAM` from `solana-kite`** when you need the token program address.
+- **Get associated token account addresses with `connection.getTokenAccountAddress(owner, mint, true)`.** The third arg allows owner-off-curve (PDA owners).
+- **No `anchor.setProvider()`, no `anchor.AnchorProvider.env()`, no `program.methods.X().rpc()`.** If those calls show up in a test, the test is on the old stack.
+
+Both flavours produce smaller, more readable tests than the legacy Anchor harness because Kite handles the repetitive setup (wallets, airdrops, mints, ATAs) directly on the connection.
 
 ## Git commits
 
