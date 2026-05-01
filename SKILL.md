@@ -266,9 +266,14 @@ try {
   - Use 'Token Extensions Program' or 'Token extensions' for the newer token program (not 'Token 2022' which is just a code name)
   - Use 'Classic Token Program' for the older token program
 
-- Onchain
-  - Use onchain and offchain, like online and offline
-  - Don't ever use 'on-chain' or 'off-chain'
+- Onchain / offchain (one word, no hyphen)
+  - Always write 'onchain' and 'offchain' as single, unhyphenated words — like 'online' and 'offline'.
+  - Never write 'on-chain' or 'off-chain'. The hyphenated forms are wrong.
+  - Apply the same rule to related terms: 'crosschain' (not 'cross-chain'), etc.
+  - Sources:
+    - [Solana Foundation style guide](https://solana.com/docs/references/terminology)
+    - [US Government usage](https://www.sec.gov/files/rules/interp/2026/33-11412.pdf)
+    - [Cat (catmcgee) will make fun of you if you write 'on-chain'](https://x.com/catmcgee/status/2028153588715761825)
 
 - Some tools in Solana unfortunately use the same word 'instructions' for both the input and the functions. To avoid confusion, use 'instruction handlers' for the functions that handle instructions, and 'instructions' for the input to those functions.
 
