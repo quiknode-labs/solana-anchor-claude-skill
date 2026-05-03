@@ -1,6 +1,6 @@
 # Solana Anchor Claude Skill
 
-A Claude Code skill for creating and editing Solana projects, including Rust/Anchor and TypeScript, with a focus on:
+A Claude Code skill for creating and editing Solana projects, including Rust/Anchor, Rust/Quasar, and TypeScript, with a focus on:
 
 - Maintainability
 - Readability
@@ -28,7 +28,7 @@ This automatically installs the skill to your Claude Code skills directory (`~/.
 
 ## Usage
 
-Once installed, the skill automatically applies when Claude Code works on Solana/Anchor projects. You can also manually invoke it with:
+Once installed, the skill automatically applies when Claude Code works on Solana programs (Anchor or Quasar) or Solana TypeScript clients. You can also manually invoke it with:
 
 ```
 /solana-anchor-claude-skill

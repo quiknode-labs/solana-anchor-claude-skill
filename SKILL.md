@@ -1,6 +1,6 @@
 ---
 name: solana-anchor-claude-skill
-description: "Use when working on Solana software, including one or more of: Solana client code using TypeScript, Rust libraries that use Solana crates, Anchor programs, including Rust program files, TypeScript tests, and Anchor.toml configuration. Designed to create minimal, reusable code without unnecessary duplication."
+description: "Use when working on Solana software, including one or more of: Solana client code using TypeScript, Rust libraries that use Solana crates, Anchor programs, Quasar programs, Rust program files for either framework, TypeScript tests, and Anchor.toml or Quasar.toml configuration. Designed to create minimal, reusable code without unnecessary duplication."
 ---
 
 # Coding Guidelines
@@ -372,6 +372,18 @@ pub struct InitializeProfile<'info> {
 ### System Functions
 
 - When you get the time via Clock, use `Clock::get()?;` rather than `anchor_lang::solana_program::clock`
+
+## Editing Quasar Programs
+
+Quasar is a newer Solana program framework that uses Anchor-like syntax (`#[program]`, `#[derive(Accounts)]`, `#[account]`) but with vastly better runtime performance: zero-copy account access, no_std, dense instruction discriminators, and compiled output that is roughly an order of magnitude smaller than the equivalent Anchor binary. The surface is familiar to Anchor developers; a few conveniences work differently or are not present yet. The rules below come out of the recent asset-leasing port.
+
+- **Use the same program ID as the Anchor port.** Offchain tooling derives PDAs from the program ID; matching IDs across the Anchor and Quasar binaries means clients work against either build with no changes.
+- **Account state numeric fields are Pod-wrapped.** Reading is `let value: u64 = self.field.into();` and writing is `self.field = PodU64::from(value);`. Same for `PodU32`, `PodI64`, etc. Forgetting the conversion compiles but produces wrong values.
+- **`log()` takes a static string only.** No format strings, no interpolation. If you need to log a value, either issue multiple `log()` calls with separate static strings or log the raw bytes.
+- **Account structs need explicit lifetimes.** Use `<'info>` on the struct and `&'info` / `&'info mut` on each reference field. Quasar will not infer these for you.
+- **No `realloc` constraint.** Pick the maximum size up front and use fixed-capacity inline storage like `PodString<N>` or `PodVec<T, N>`. Plan the layout before writing the state struct.
+- **No `close` constraint.** If an account needs to be closed, zero the lamports and clear the data manually inside the handler.
+- **No `CpiContext`.** SPL CPIs use the helper style on the program handle: `self.token_program.transfer(...).invoke()`. Generic CPIs use `BufCpiCall::new(...).invoke()`. Anchor's `CpiContext::new(program, accounts).invoke()` pattern does not exist here.
 
 ## Git commits
 
